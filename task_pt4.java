@@ -1,7 +1,6 @@
 package as.project;
 
 import java.io.*;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 import java.util.Map;
@@ -11,14 +10,18 @@ public class task_pt4 {
 
     public static void main(String[] args) {
 
-        BufferedReader br = null;
+        ProgressBarBuilder pbb = new ProgressBarBuilder()
+                .setTaskName("Reading")
+                .setUnit("MB", 1048576);
+
         Map<String, Integer> frequencies = new LinkedHashMap<String, Integer>();
         LinkedHashMap<String, Integer> reverseSortedMap = new LinkedHashMap<String, Integer>();
 
-        try {
-            br = new BufferedReader(new FileReader("url_response.txt"));
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(
+                ProgressBar.wrap(new FileInputStream("url_response.txt"), pbb)
+        ))) {
             String line;
-            String words[] = null;
+            String words[];
 
             while ((line = br.readLine()) != null) {
                 words = line.split(" ");
@@ -46,14 +49,6 @@ public class task_pt4 {
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Error " + e);
-        } finally {
-            try {
-                br.close();
-            } catch (IOException e) {
-                System.out.println("Error " + e);
-            }
-
-
         }
     }
 }
